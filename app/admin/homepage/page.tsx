@@ -129,7 +129,11 @@ export default function AdminHomepagePage() {
                     ))}
                 </section>
 
-                <button type="submit" className="btn btn-primary" disabled={saving}>
+                <button
+                    type="submit"
+                    className={`${styles.submitButton} btn btn-primary`}
+                    disabled={saving}
+                >
                     {saving ? 'Saving...' : 'Save Settings'}
                 </button>
             </form>

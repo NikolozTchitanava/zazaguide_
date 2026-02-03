@@ -76,12 +76,12 @@
     margin-bottom: 1.5rem;
 }
 
-button[type="submit"] {
+.submitButton {
     width: 100%;
     margin-top: 1rem;
 }
 
-button:disabled {
+.submitButton:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
