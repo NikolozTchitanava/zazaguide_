@@ -1,0 +1,61 @@
+.footer {
+  background: var(--pine);
+  color: #fdf8f2;
+  padding: 4rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.brand h3 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  font-size: 1.6rem;
+  margin-bottom: 0.75rem;
+  color: #fdf8f2;
+}
+
+.brand p {
+  color: rgba(253, 248, 242, 0.8);
+  max-width: 320px;
+}
+
+.social h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLinks a {
+  color: rgba(253, 248, 242, 0.8);
+  transition: color 0.3s ease;
+}
+
+.socialLinks a:hover {
+  color: #fff;
+}
+
+.bottom {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(253, 248, 242, 0.2);
+  text-align: center;
+  color: rgba(253, 248, 242, 0.6);
+  font-size: 0.9rem;
+}

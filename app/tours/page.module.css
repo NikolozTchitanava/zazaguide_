@@ -1,0 +1,47 @@
+.page {
+    min-height: 100vh;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--secondary), #003366);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.header p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+.empty {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.empty h2 {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+}
+
+.empty p {
+    font-size: 1.125rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+}

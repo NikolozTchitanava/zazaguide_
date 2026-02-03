@@ -1,0 +1,29 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 4rem 0 2rem;
+  background: linear-gradient(135deg, rgba(91, 27, 45, 0.08), rgba(211, 166, 108, 0.12));
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 4vw, 3.4rem);
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  color: var(--ink-soft);
+  max-width: 600px;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  lastLoginAt DateTime?
+}
+
+model Tour {
+  id          String            @id @default(cuid())
+  price       Decimal           @db.Decimal(10, 2)
+  difficulty  String            // Easy, Medium, Hard
+  featured    Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  images      TourImage[]
+  times       TourTime[]
+  translations TourTranslation[]
+
+  @@index([featured, createdAt])
+}
+
+model TourTranslation {
+  id          String   @id @default(cuid())
+  tourId      String
+  locale      String
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tour        Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@unique([tourId, locale])
+  @@index([locale])
+}
+
+model TourImage {
+  id        String   @id @default(cuid())
+  tourId    String
+  url       String
+  isPrimary Boolean  @default(false)
+  sortOrder Int      @default(0)
+  width     Int?
+  height    Int?
+  blurDataUrl String?
+  createdAt DateTime @default(now())
+  tour      Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@index([tourId])
+}
+
+model TourTime {
+  id        String   @id @default(cuid())
+  tourId    String
+  timeSlot  String
+  createdAt DateTime @default(now())
+  tour      Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@index([tourId])
+}
+
+model GalleryImage {
+  id           String                     @id @default(cuid())
+  url          String
+  createdAt    DateTime                   @default(now())
+  translations GalleryImageTranslation[]
+}
+
+model GalleryImageTranslation {
+  id             String   @id @default(cuid())
+  galleryImageId String
+  locale         String
+  caption        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  galleryImage   GalleryImage @relation(fields: [galleryImageId], references: [id], onDelete: Cascade)
+
+  @@unique([galleryImageId, locale])
+  @@index([locale])
+}
+
+model HomepageSetting {
+  id        String   @id @default(cuid())
+  key       String
+  locale    String
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, locale])
+  @@index([locale])
+}

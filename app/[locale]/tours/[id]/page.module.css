@@ -1,0 +1,121 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 4rem 0 2rem;
+  background: linear-gradient(135deg, rgba(23, 56, 40, 0.08), rgba(91, 27, 45, 0.1));
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  margin: 0.6rem 0;
+}
+
+.meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--wine);
+}
+
+.gallery {
+  padding: 2rem 0;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.galleryItem {
+  position: relative;
+  width: 100%;
+  padding-top: 70%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.description {
+  color: var(--ink-soft);
+}
+
+.times {
+  margin-top: 2rem;
+}
+
+.timeSlots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.timeSlot {
+  background: rgba(211, 166, 108, 0.2);
+  color: #8a5a2b;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.bookingCard {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.bookingPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 1.5rem 0;
+}
+
+.priceLabel {
+  color: var(--ink-soft);
+}
+
+.priceValue {
+  font-size: 1.6rem;
+  color: var(--wine);
+  font-weight: 700;
+}
+
+.backSection {
+  padding: 2rem 0 4rem;
+}
+
+@media (max-width: 900px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}

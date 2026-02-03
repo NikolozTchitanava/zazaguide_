@@ -1,0 +1,173 @@
+.page {
+    min-height: 100vh;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--secondary), #003366);
+    color: white;
+    padding: 3rem 0;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.meta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.gallery {
+    padding: 3rem 0;
+    background: var(--bg-light);
+}
+
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.galleryItem {
+    position: relative;
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.galleryItem:hover {
+    transform: scale(1.02);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+}
+
+.main h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.description {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #444;
+    white-space: pre-wrap;
+    margin-bottom: 2rem;
+}
+
+.times {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.times h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.timeSlots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.timeSlot {
+    padding: 0.75rem 1.25rem;
+    background: white;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.timeSlot:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.sidebar {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+}
+
+.bookingCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.bookingCard h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.bookingPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.priceLabel {
+    font-size: 1rem;
+    color: #666;
+}
+
+.priceValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.backSection {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+@media (max-width: 968px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+    }
+
+    .galleryGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .price {
+        font-size: 1.5rem;
+    }
+}

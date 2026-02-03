@@ -1,24 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ZazaGuide is a multilingual (EN/KA/RU) tours website for Georgia with a Next.js App Router frontend, Prisma, and PostgreSQL (Supabase).
 
 ## Getting Started
 
-First, run the development server:
+First, set your environment variables in `.env`:
+
+```
+DATABASE_URL="postgresql://postgres.erzigynyrbfzqenjszam:[YOUR-PASSWORD]@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"
+DIRECT_URL="postgresql://postgres:[YOUR-PASSWORD]@db.erzigynyrbfzqenjszam.supabase.co:5432/postgres"
+NEXTAUTH_SECRET="[REPLACE-ME]"
+NEXTAUTH_URL="http://localhost:5000"
+SUPABASE_URL="https://erzigynyrbfzqenjszam.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY="[REPLACE-ME]"
+SUPABASE_STORAGE_BUCKET="tours"
+```
+
+Make sure you have a public Supabase Storage bucket named `tours` (or change `SUPABASE_STORAGE_BUCKET`).
+
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:5000 and you will be redirected to `/en`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Seed the database (creates the admin user and default homepage settings):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run prisma:seed
+```
+
+Admin seed defaults to `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env`.
+
+Run migrations locally:
+
+```bash
+npx prisma migrate dev
+```
+
+Deploy migrations in production:
+
+```bash
+npx prisma migrate deploy
+```
+
+This project uses `next/font` to load Playfair Display and Manrope.
 
 ## Learn More
 
