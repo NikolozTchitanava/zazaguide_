@@ -95,7 +95,7 @@ export default async function TourDetailPage({
                                     <span className={styles.priceValue}>{formattedPrice}</span>
                                 </div>
                                 <a
-                                    href="https://wa.me/1234567890"
+                                    href="https://wa.me/99559434604"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-primary"
@@ -104,7 +104,7 @@ export default async function TourDetailPage({
                                     {t.tours.contactWhatsapp}
                                 </a>
                                 <a
-                                    href="https://instagram.com"
+                                    href="https://www.instagram.com/zazaguide_sakartvelo/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-outline"
