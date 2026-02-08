@@ -16,6 +16,7 @@ interface TourCardProps {
 
 export default function TourCard({ tour, locale }: TourCardProps) {
     const primaryImage = tour.images.find((img) => img.isPrimary) || tour.images[0];
+    const isInlineImage = Boolean(primaryImage?.url?.startsWith('data:'));
     const t = getDictionary(locale);
     const priceValue = typeof tour.price === 'string' ? Number(tour.price) : tour.price;
     const formattedPrice = Number.isFinite(priceValue)
@@ -26,13 +27,21 @@ export default function TourCard({ tour, locale }: TourCardProps) {
         <Link href={`/${locale}/tours/${tour.id}`} className={styles.card}>
             <div className={styles.imageWrapper}>
                 {primaryImage ? (
-                    <Image
-                        src={primaryImage.url}
-                        alt={tour.name}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+                    isInlineImage ? (
+                        <img
+                            src={primaryImage.url}
+                            alt={tour.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                    ) : (
+                        <Image
+                            src={primaryImage.url}
+                            alt={tour.name}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                    )
                 ) : (
                     <div className={styles.placeholder}>No Image</div>
                 )}

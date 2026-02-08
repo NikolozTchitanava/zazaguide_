@@ -54,10 +54,14 @@ export default function AdminGalleryPage() {
                 body: formData,
             });
             if (!uploadRes.ok) {
-                alert('Failed to upload image');
+                const failBody = await uploadRes.text();
+                alert(`Failed to upload image: ${failBody}`);
                 return;
             }
             const uploadData = await uploadRes.json();
+            if (uploadData.warning) {
+                alert(uploadData.warning);
+            }
 
             const translations = locales
                 .map((locale) => ({ locale, caption: captions[locale] }))
@@ -146,7 +150,15 @@ export default function AdminGalleryPage() {
                     images.map((image) => (
                         <div key={image.id} className={styles.imageCard}>
                             <div className={styles.imageWrapper}>
-                                <Image src={image.url} alt={image.caption || 'Gallery image'} fill style={{ objectFit: 'cover' }} />
+                                {image.url.startsWith('data:') ? (
+                                    <img
+                                        src={image.url}
+                                        alt={image.caption || 'Gallery image'}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                ) : (
+                                    <Image src={image.url} alt={image.caption || 'Gallery image'} fill style={{ objectFit: 'cover' }} />
+                                )}
                             </div>
                             {image.caption && <p className={styles.imageCaption}>{image.caption}</p>}
                             <button onClick={() => handleDelete(image.id)} className={styles.deleteBtn}>

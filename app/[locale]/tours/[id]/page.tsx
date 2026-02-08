@@ -52,13 +52,21 @@ export default async function TourDetailPage({
                         <div className={styles.galleryGrid}>
                             {tour.images.map((image: any, index: number) => (
                                 <div key={image.id || index} className={styles.galleryItem}>
-                                    <Image
-                                        src={image.url}
-                                        alt={`${tour.name} - Image ${index + 1}`}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                    />
+                                    {typeof image.url === 'string' && image.url.startsWith('data:') ? (
+                                        <img
+                                            src={image.url}
+                                            alt={`${tour.name} - Image ${index + 1}`}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={image.url}
+                                            alt={`${tour.name} - Image ${index + 1}`}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                        />
+                                    )}
                                 </div>
                             ))}
                         </div>

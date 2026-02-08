@@ -5,9 +5,7 @@ import styles from './page.module.css';
 
 async function getTours(locale: Locale) {
     const baseUrl = getServerBaseUrl();
-    const res = await fetch(`${baseUrl}/api/tours?locale=${locale}`, {
-        next: { revalidate: 300 },
-    });
+    const res = await fetch(`${baseUrl}/api/tours?locale=${locale}`, { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
 }

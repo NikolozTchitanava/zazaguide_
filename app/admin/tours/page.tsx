@@ -75,10 +75,14 @@ export default function AdminToursPage() {
                 body: formData,
             });
             if (!res.ok) {
-                alert('Failed to upload image');
+                const failBody = await res.text();
+                alert(`Failed to upload image: ${failBody}`);
                 return;
             }
             const data = await res.json();
+            if (data.warning) {
+                alert(data.warning);
+            }
             const newUrls = [...imageUrls];
             newUrls[index] = data.url;
             setImageUrls(newUrls);

@@ -39,13 +39,21 @@ export default function Lightbox({ images, initialIndex, onClose }: LightboxProp
 
             <div className={styles.content} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.imageWrapper}>
-                    <Image
-                        src={images[currentIndex].url}
-                        alt={images[currentIndex].caption || `Image ${currentIndex + 1}`}
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        sizes="100vw"
-                    />
+                    {images[currentIndex].url.startsWith('data:') ? (
+                        <img
+                            src={images[currentIndex].url}
+                            alt={images[currentIndex].caption || `Image ${currentIndex + 1}`}
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                    ) : (
+                        <Image
+                            src={images[currentIndex].url}
+                            alt={images[currentIndex].caption || `Image ${currentIndex + 1}`}
+                            fill
+                            style={{ objectFit: 'contain' }}
+                            sizes="100vw"
+                        />
+                    )}
                 </div>
                 {images[currentIndex].caption && (
                     <p className={styles.caption}>{images[currentIndex].caption}</p>

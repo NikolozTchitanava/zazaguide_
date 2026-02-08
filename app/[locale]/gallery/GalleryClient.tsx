@@ -29,13 +29,21 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
                         className={styles.galleryItem}
                         onClick={() => openLightbox(index)}
                     >
-                        <Image
-                            src={image.url}
-                            alt={image.caption || `Gallery image ${index + 1}`}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                        />
+                        {image.url.startsWith('data:') ? (
+                            <img
+                                src={image.url}
+                                alt={image.caption || `Gallery image ${index + 1}`}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                        ) : (
+                            <Image
+                                src={image.url}
+                                alt={image.caption || `Gallery image ${index + 1}`}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                            />
+                        )}
                     </div>
                 ))}
             </div>

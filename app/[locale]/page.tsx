@@ -18,9 +18,7 @@ async function getSettings(locale: Locale): Promise<HomeSettings> {
 
 async function getFeaturedTours(locale: Locale) {
   const baseUrl = getServerBaseUrl();
-  const res = await fetch(`${baseUrl}/api/tours?featured=true&locale=${locale}`, {
-    next: { revalidate: 300 },
-  });
+  const res = await fetch(`${baseUrl}/api/tours?featured=true&locale=${locale}`, { cache: 'no-store' });
   if (!res.ok) return [];
   return res.json();
 }

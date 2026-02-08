@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const supabaseUrl = process.env.SUPABASE_URL;
-        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'tours';
+        const supabaseUrl = process.env.SUPABASE_URL?.trim();
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+        const bucket = (process.env.SUPABASE_STORAGE_BUCKET || 'tours').trim();
 
         if (!supabaseUrl || !supabaseKey) {
             return NextResponse.json({ error: 'Storage not configured' }, { status: 500 });
@@ -54,14 +54,20 @@ export async function POST(request: NextRequest) {
             body: buffer,
         });
 
-        if (!uploadRes.ok) {
-            const errorText = await uploadRes.text();
-            console.error('Upload failed:', errorText);
-            return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+        if (uploadRes.ok) {
+            const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${filename}`;
+            return NextResponse.json({ url: publicUrl });
         }
 
-        const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${filename}`;
-        return NextResponse.json({ url: publicUrl });
+        const errorText = await uploadRes.text();
+        console.error('Upload failed:', errorText);
+
+        // Fallback: keep uploads functional even when storage credentials are invalid.
+        const inlineDataUrl = `data:${file.type};base64,${buffer.toString('base64')}`;
+        return NextResponse.json({
+            url: inlineDataUrl,
+            warning: 'Storage upload failed; saved as inline image data',
+        });
     } catch (error) {
         console.error('Upload error:', error);
         return NextResponse.json(
