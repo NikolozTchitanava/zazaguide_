@@ -27,8 +27,6 @@ export async function GET(
                         id: true,
                         url: true,
                         isPrimary: true,
-                        width: true,
-                        height: true,
                     },
                 },
                 times: {
@@ -132,7 +130,11 @@ export async function PUT(
                         })),
                     },
                 },
-                include: { images: true, times: true, translations: true },
+                include: {
+                    images: { select: { id: true, url: true, isPrimary: true, sortOrder: true } },
+                    times: { select: { id: true, timeSlot: true } },
+                    translations: { select: { locale: true, name: true, description: true } },
+                },
             });
 
             return tour;
@@ -182,6 +184,7 @@ export async function DELETE(
                             method: 'DELETE',
                             headers: {
                                 Authorization: `Bearer ${supabaseKey}`,
+                                apikey: supabaseKey,
                             },
                         });
                     }

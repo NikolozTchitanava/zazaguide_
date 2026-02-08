@@ -7,15 +7,48 @@ async function main() {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@zazaguide.com';
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
-  
-  await prisma.admin.upsert({
-    where: { email: adminEmail },
-    update: {},
-    create: {
-      email: adminEmail,
-      password: hashedPassword,
-    },
+
+  const existingAdmin = await prisma.admin.findFirst({
+    orderBy: { createdAt: 'asc' },
   });
+
+  if (existingAdmin) {
+    if (existingAdmin.email === adminEmail) {
+      await prisma.admin.update({
+        where: { id: existingAdmin.id },
+        data: { password: hashedPassword },
+      });
+    } else {
+      const targetAdmin = await prisma.admin.findUnique({
+        where: { email: adminEmail },
+      });
+
+      if (targetAdmin) {
+        await prisma.admin.update({
+          where: { id: targetAdmin.id },
+          data: { password: hashedPassword },
+        });
+
+        if (targetAdmin.id !== existingAdmin.id) {
+          await prisma.admin.delete({
+            where: { id: existingAdmin.id },
+          });
+        }
+      } else {
+        await prisma.admin.update({
+          where: { id: existingAdmin.id },
+          data: { email: adminEmail, password: hashedPassword },
+        });
+      }
+    }
+  } else {
+    await prisma.admin.create({
+      data: {
+        email: adminEmail,
+        password: hashedPassword,
+      },
+    });
+  }
 
   // Create homepage settings for each locale
   const settingsByLocale: Record<string, { key: string; value: string }[]> = {

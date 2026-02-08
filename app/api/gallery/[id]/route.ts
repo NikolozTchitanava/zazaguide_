@@ -35,6 +35,7 @@ export async function DELETE(
                     method: 'DELETE',
                     headers: {
                         Authorization: `Bearer ${supabaseKey}`,
+                        apikey: supabaseKey,
                     },
                 });
             }

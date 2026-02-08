@@ -31,10 +31,9 @@ export async function GET(request: NextRequest) {
                 images: {
                     orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }],
                     select: {
+                        id: true,
                         url: true,
                         isPrimary: true,
-                        width: true,
-                        height: true,
                     },
                 },
                 times: {
@@ -122,7 +121,11 @@ export async function POST(request: NextRequest) {
                     })),
                 },
             },
-            include: { images: true, times: true, translations: true },
+            include: {
+                images: { select: { id: true, url: true, isPrimary: true, sortOrder: true } },
+                times: { select: { id: true, timeSlot: true } },
+                translations: { select: { locale: true, name: true, description: true } },
+            },
         });
 
         return NextResponse.json(tour);

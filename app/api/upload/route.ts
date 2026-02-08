@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${supabaseKey}`,
+                apikey: supabaseKey,
                 'Content-Type': file.type,
                 'x-upsert': 'true',
             },

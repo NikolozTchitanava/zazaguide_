@@ -47,8 +47,13 @@ export default function AdminToursPage() {
     const fetchTours = async () => {
         try {
             const res = await fetch('/api/tours?includeTranslations=true');
+            if (!res.ok) {
+                console.error('Failed to fetch tours:', await res.text());
+                setTours([]);
+                return;
+            }
             const data = await res.json();
-            setTours(data);
+            setTours(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Error fetching tours:', error);
         } finally {
