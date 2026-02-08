@@ -4,6 +4,13 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { normalizeLocale } from '@/lib/i18n';
 
+type GalleryListItem = {
+    id: string;
+    url: string;
+    createdAt: Date;
+    translations: Array<{ locale: string; caption: string | null }>;
+};
+
 // GET gallery images
 export async function GET(request: NextRequest) {
     try {
@@ -29,10 +36,10 @@ export async function GET(request: NextRequest) {
             },
         });
 
-        const result = images.map((image) => {
+        const result = (images as GalleryListItem[]).map((image: GalleryListItem) => {
             const translation =
-                image.translations.find((t) => t.locale === locale) ||
-                image.translations.find((t) => t.locale === 'en');
+                image.translations.find((t: { locale: string; caption: string | null }) => t.locale === locale) ||
+                image.translations.find((t: { locale: string; caption: string | null }) => t.locale === 'en');
 
             return {
                 id: image.id,
