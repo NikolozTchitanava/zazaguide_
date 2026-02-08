@@ -5,6 +5,17 @@ import { prisma } from '@/lib/prisma';
 import { normalizeLocale } from '@/lib/i18n';
 import { Prisma } from '@prisma/client';
 
+type TourTranslationRow = { locale: string; name: string; description: string };
+type TourListRow = {
+    id: string;
+    price: Prisma.Decimal;
+    difficulty: string;
+    featured: boolean;
+    images: Array<{ id: string; url: string; isPrimary: boolean }>;
+    times: Array<{ id: string; timeSlot: string }>;
+    translations: TourTranslationRow[];
+};
+
 // GET all tours or featured tours
 export async function GET(request: NextRequest) {
     try {
@@ -20,7 +31,7 @@ export async function GET(request: NextRequest) {
             }
         }
 
-        const tours = await prisma.tour.findMany({
+        const tours = (await prisma.tour.findMany({
             where: featured === 'true' ? { featured: true } : undefined,
             orderBy: { createdAt: 'desc' },
             select: {
@@ -44,16 +55,28 @@ export async function GET(request: NextRequest) {
                     : {
                           where: { locale: { in: [locale, 'en'] } },
                           select: { locale: true, name: true, description: true },
-                      },
+                },
             },
-        });
+        })) as TourListRow[];
 
         const result = includeTranslations
             ? tours
             : tours.map((tour) => {
-                  const translation =
-                      tour.translations.find((t) => t.locale === locale) ||
-                      tour.translations.find((t) => t.locale === 'en');
+                  let translation: TourTranslationRow | undefined;
+                  for (const candidate of tour.translations) {
+                      if (candidate.locale === locale) {
+                          translation = candidate;
+                          break;
+                      }
+                  }
+                  if (!translation) {
+                      for (const candidate of tour.translations) {
+                          if (candidate.locale === 'en') {
+                              translation = candidate;
+                              break;
+                          }
+                      }
+                  }
 
                   return {
                       ...tour,

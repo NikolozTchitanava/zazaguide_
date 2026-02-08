@@ -5,6 +5,17 @@ import { prisma } from '@/lib/prisma';
 import { normalizeLocale } from '@/lib/i18n';
 import { Prisma } from '@prisma/client';
 
+type TourTranslationRow = { locale: string; name: string; description: string };
+type TourDetailRow = {
+    id: string;
+    price: Prisma.Decimal;
+    difficulty: string;
+    featured: boolean;
+    images: Array<{ id: string; url: string; isPrimary: boolean }>;
+    times: Array<{ id: string; timeSlot: string }>;
+    translations: TourTranslationRow[];
+};
+
 // GET single tour by ID
 export async function GET(
     request: NextRequest,
@@ -14,7 +25,7 @@ export async function GET(
         const { searchParams } = new URL(request.url);
         const locale = normalizeLocale(searchParams.get('locale') || undefined);
 
-        const tour = await prisma.tour.findUnique({
+        const tour = (await prisma.tour.findUnique({
             where: { id: params.id },
             select: {
                 id: true,
@@ -37,15 +48,27 @@ export async function GET(
                     select: { locale: true, name: true, description: true },
                 },
             },
-        });
+        })) as TourDetailRow | null;
 
         if (!tour) {
             return NextResponse.json({ error: 'Tour not found' }, { status: 404 });
         }
 
-        const translation =
-            tour.translations.find((t) => t.locale === locale) ||
-            tour.translations.find((t) => t.locale === 'en');
+        let translation: TourTranslationRow | undefined;
+        for (const candidate of tour.translations) {
+            if (candidate.locale === locale) {
+                translation = candidate;
+                break;
+            }
+        }
+        if (!translation) {
+            for (const candidate of tour.translations) {
+                if (candidate.locale === 'en') {
+                    translation = candidate;
+                    break;
+                }
+            }
+        }
 
         return NextResponse.json({
             ...tour,
