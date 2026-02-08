@@ -19,13 +19,13 @@ export default function AdminLoginPage() {
 
         try {
             const result = await signIn('credentials', {
-                email,
+                email: email.trim(),
                 password,
                 redirect: false,
             });
 
             if (result?.error) {
-                setError('Invalid email or password');
+                setError(result.error === 'CredentialsSignin' ? 'Invalid email or password' : 'Login failed. Please try again.');
             } else {
                 router.push('/admin');
                 router.refresh();

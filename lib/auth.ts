@@ -19,24 +19,34 @@ export const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
+                const normalizedEmail = credentials?.email?.trim().toLowerCase();
+                const password = credentials?.password;
+
+                if (!normalizedEmail || !password) {
                     return null;
                 }
 
-                const admin = await prisma.admin.findUnique({
-                    where: { email: credentials.email },
+                const admin = await prisma.admin.findFirst({
+                    where: {
+                        email: {
+                            equals: normalizedEmail,
+                            mode: 'insensitive',
+                        },
+                    },
                 });
 
                 if (!admin) {
+                    console.warn('Admin login failed: user not found', { email: normalizedEmail });
                     return null;
                 }
 
                 const isPasswordValid = await bcrypt.compare(
-                    credentials.password,
+                    password,
                     admin.password
                 );
 
                 if (!isPasswordValid) {
+                    console.warn('Admin login failed: password mismatch', { email: normalizedEmail });
                     return null;
                 }
 
