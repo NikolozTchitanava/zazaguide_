@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import TourCard from '@/components/TourCard';
 import { getDictionary, normalizeLocale, Locale } from '@/lib/i18n';
+import { getServerBaseUrl } from '@/lib/serverBaseUrl';
 import styles from './page.module.css';
 
 async function getSettings(locale: Locale) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+  const baseUrl = getServerBaseUrl();
   const res = await fetch(`${baseUrl}/api/settings?locale=${locale}`, {
     next: { revalidate: 300 },
   });
@@ -13,7 +14,7 @@ async function getSettings(locale: Locale) {
 }
 
 async function getFeaturedTours(locale: Locale) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+  const baseUrl = getServerBaseUrl();
   const res = await fetch(`${baseUrl}/api/tours?featured=true&locale=${locale}`, {
     next: { revalidate: 300 },
   });

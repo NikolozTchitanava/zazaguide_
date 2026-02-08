@@ -14,10 +14,10 @@ export async function GET(request: NextRequest) {
             where: { locale },
         });
 
-        const settingsObj = settings.reduce((acc, setting) => {
+        const settingsObj = settings.reduce<Record<string, string>>((acc, setting) => {
             acc[setting.key] = setting.value;
             return acc;
-        }, {} as Record<string, string>);
+        }, {});
 
         return NextResponse.json(settingsObj);
     } catch (error) {

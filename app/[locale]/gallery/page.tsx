@@ -1,9 +1,10 @@
 import GalleryClient from './GalleryClient';
 import { getDictionary, normalizeLocale, Locale } from '@/lib/i18n';
+import { getServerBaseUrl } from '@/lib/serverBaseUrl';
 import styles from './page.module.css';
 
 async function getGalleryImages(locale: Locale) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+    const baseUrl = getServerBaseUrl();
     const res = await fetch(`${baseUrl}/api/gallery?locale=${locale}&limit=36`, {
         next: { revalidate: 300 },
     });

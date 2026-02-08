@@ -1,9 +1,10 @@
 import TourCard from '@/components/TourCard';
 import { getDictionary, normalizeLocale, Locale } from '@/lib/i18n';
+import { getServerBaseUrl } from '@/lib/serverBaseUrl';
 import styles from './page.module.css';
 
 async function getTours(locale: Locale) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000';
+    const baseUrl = getServerBaseUrl();
     const res = await fetch(`${baseUrl}/api/tours?locale=${locale}`, {
         next: { revalidate: 300 },
     });
