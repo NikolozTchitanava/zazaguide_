@@ -16,6 +16,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
         const nextPath = basePath === '' ? '' : basePath;
         return `/${targetLocale}${nextPath}`;
     };
+    const isActive = (href: string) => pathname === href;
 
     return (
         <nav className={styles.navbar}>
@@ -37,17 +38,29 @@ export default function Navbar({ locale }: { locale: Locale }) {
 
                 <ul className={`${styles.navLinks} ${isOpen ? styles.active : ''}`}>
                     <li>
-                        <Link href={`/${locale}`} onClick={() => setIsOpen(false)}>
+                        <Link
+                            href={`/${locale}`}
+                            onClick={() => setIsOpen(false)}
+                            className={isActive(`/${locale}`) ? styles.linkActive : ''}
+                        >
                             {t.nav.home}
                         </Link>
                     </li>
                     <li>
-                        <Link href={`/${locale}/tours`} onClick={() => setIsOpen(false)}>
+                        <Link
+                            href={`/${locale}/tours`}
+                            onClick={() => setIsOpen(false)}
+                            className={isActive(`/${locale}/tours`) ? styles.linkActive : ''}
+                        >
                             {t.nav.tours}
                         </Link>
                     </li>
                     <li>
-                        <Link href={`/${locale}/gallery`} onClick={() => setIsOpen(false)}>
+                        <Link
+                            href={`/${locale}/gallery`}
+                            onClick={() => setIsOpen(false)}
+                            className={isActive(`/${locale}/gallery`) ? styles.linkActive : ''}
+                        >
                             {t.nav.gallery}
                         </Link>
                     </li>

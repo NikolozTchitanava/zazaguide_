@@ -2,9 +2,10 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(245, 239, 230, 0.9);
+  background: rgba(245, 239, 230, 0.92);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(27, 26, 23, 0.06);
 }
 
 .container {
@@ -31,7 +32,7 @@
   font-family: var(--font-body), 'Manrope', sans-serif;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.28em;
   color: var(--ink-soft);
 }
 
@@ -47,11 +48,19 @@
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
 }
 
 .navLinks li a:hover {
   color: var(--wine);
+  background: rgba(91, 27, 45, 0.06);
+}
+
+.linkActive {
+  color: var(--wine) !important;
+  background: rgba(91, 27, 45, 0.1);
 }
 
 .localeSwitch {
@@ -112,7 +121,7 @@
     right: 0;
     background: rgba(245, 239, 230, 0.97);
     flex-direction: column;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem 1.75rem;
     gap: 1.25rem;
     transform: translateY(-120%);
     opacity: 0;

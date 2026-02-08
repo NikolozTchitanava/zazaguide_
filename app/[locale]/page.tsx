@@ -5,7 +5,9 @@ import { getDictionary, normalizeLocale, Locale } from '@/lib/i18n';
 import { getServerBaseUrl } from '@/lib/serverBaseUrl';
 import styles from './page.module.css';
 
-async function getSettings(locale: Locale) {
+type HomeSettings = Partial<Record<string, string>>;
+
+async function getSettings(locale: Locale): Promise<HomeSettings> {
   const baseUrl = getServerBaseUrl();
   const res = await fetch(`${baseUrl}/api/settings?locale=${locale}`, {
     next: { revalidate: 300 },
@@ -23,91 +25,121 @@ async function getFeaturedTours(locale: Locale) {
   return res.json();
 }
 
+type HomeCopy = {
+  heroEyebrow: string;
+  heroTagline: string;
+  heroSubtitle: string;
+  location: string;
+  tourTypes: string;
+  why1: string;
+  why2: string;
+  why3: string;
+  why4: string;
+  why5: string;
+  why6: string;
+  aboutEyebrow: string;
+  aboutTitle: string;
+  aboutBody: string;
+  aboutMember: string;
+  aboutCertificateTitle: string;
+  aboutCertificateBody: string;
+};
+
+const fallbackByLocale: Record<Locale, HomeCopy> = {
+  en: {
+    heroEyebrow: 'ZazaGuide',
+    heroTagline: 'Georgia, but deeper.',
+    heroSubtitle: 'Mountains, monasteries, wine - led by local guides.',
+    location: 'Tbilisi, Georgia',
+    tourTypes: 'Hiking, city walks, wine tastings, cultural routes',
+    why1: 'Local guides with deep knowledge',
+    why2: 'Small groups and a personal touch',
+    why3: 'Flexible schedules and custom routes',
+    why4: 'Best value for authentic experiences',
+    why5: 'Safety-first approach and quality gear',
+    why6: 'Responsible, sustainable tourism',
+    aboutEyebrow: 'About Us',
+    aboutTitle: 'Certified Guide, Trusted Experience',
+    aboutBody:
+      'Zaza is a certified guide in multiple fields, including wine tourism, walking tours, and destination guiding.',
+    aboutMember: 'Zaza is a member of the World Guides Association.',
+    aboutCertificateTitle: 'Professional Certificate',
+    aboutCertificateBody: 'Tourism management and tourist guiding certification by Newkaz.',
+  },
+  ka: {
+    heroEyebrow: 'ZazaGuide',
+    heroTagline: 'აღმოაჩინე საქართველო უფრო ღრმად',
+    heroSubtitle: 'მთები, მონასტრები და ღვინო - ადგილობრივ გიდებთან ერთად.',
+    location: 'თბილისი, საქართველო',
+    tourTypes: 'ლაშქრობა, ქალაქის ტურები, ღვინის დეგუსტაცია, კულტურული მარშრუტები',
+    why1: 'ადგილობრივი გიდები ღრმა ცოდნით',
+    why2: 'პატარა ჯგუფები და პერსონალური მიდგომა',
+    why3: 'მოქნილი გრაფიკი და ინდივიდუალური მარშრუტები',
+    why4: 'საუკეთესო ფასები ავთენტური გამოცდილებისთვის',
+    why5: 'უსაფრთხოება პირველ ადგილზე',
+    why6: 'პასუხისმგებლიანი და მდგრადი ტურიზმი',
+    aboutEyebrow: 'ჩვენ შესახებ',
+    aboutTitle: 'სერტიფიცირებული გიდი და სანდო გამოცდილება',
+    aboutBody:
+      'ზაზა არის სერტიფიცირებული გიდი მრავალ მიმართულებაში: ღვინის ტურიზმი, ფეხით ტურები და ტურისტული გიდობა.',
+    aboutMember: 'ზაზა მსოფლიო გიდების ასოციაციის წევრია.',
+    aboutCertificateTitle: 'პროფესიული სერტიფიკატი',
+    aboutCertificateBody: 'Newkaz-ის ტურიზმის მენეჯმენტისა და ტურისტული გიდობის სერტიფიკატი.',
+  },
+  ru: {
+    heroEyebrow: 'ZazaGuide',
+    heroTagline: 'Грузия, но глубже.',
+    heroSubtitle: 'Горы, монастыри и вино - с местными гидами.',
+    location: 'Тбилиси, Грузия',
+    tourTypes: 'Походы, городские прогулки, винные дегустации, культурные маршруты',
+    why1: 'Местные гиды с глубокими знаниями',
+    why2: 'Небольшие группы и личный подход',
+    why3: 'Гибкий график и индивидуальные маршруты',
+    why4: 'Лучшее соотношение цены и качества',
+    why5: 'Безопасность и качественная организация',
+    why6: 'Ответственный и устойчивый туризм',
+    aboutEyebrow: 'О нас',
+    aboutTitle: 'Сертифицированный гид и проверенный опыт',
+    aboutBody:
+      'Заза - сертифицированный гид в нескольких направлениях: винный туризм, пешеходные экскурсии и сопровождение туристов.',
+    aboutMember: 'Заза является членом Всемирной ассоциации гидов.',
+    aboutCertificateTitle: 'Профессиональный сертификат',
+    aboutCertificateBody: 'Сертификат Newkaz по туристическому менеджменту и сопровождению туристов.',
+  },
+};
+
+const englishDefaults = {
+  heroEyebrow: 'ZazaGuide',
+  heroTagline: 'Georgia, but deeper.',
+  heroSubtitle: 'Mountains, monasteries, wine - led by local guides.',
+};
+
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = normalizeLocale(params.locale) as Locale;
   const t = getDictionary(locale);
   const settings = await getSettings(locale);
   const featuredTours = await getFeaturedTours(locale);
-  const homeFallbacks: Record<Locale, {
-    location: string;
-    tourTypes: string;
-    why1: string;
-    why2: string;
-    why3: string;
-    why4: string;
-    why5: string;
-    why6: string;
-    aboutEyebrow: string;
-    aboutTitle: string;
-    aboutBody: string;
-    aboutMember: string;
-    aboutCertificateTitle: string;
-    aboutCertificateBody: string;
-  }> = {
-    en: {
-      location: 'Tbilisi, Georgia',
-      tourTypes: 'Hiking, city walks, wine tastings, cultural routes',
-      why1: 'Local guides with deep knowledge',
-      why2: 'Small groups and a personal touch',
-      why3: 'Flexible schedules and custom routes',
-      why4: 'Best value for authentic experiences',
-      why5: 'Safety-first approach and quality gear',
-      why6: 'Responsible, sustainable tourism',
-      aboutEyebrow: 'About Us',
-      aboutTitle: 'Certified Guide, Trusted Experience',
-      aboutBody:
-        'Zaza is a certified guide in multiple fields, including wine tourism, walking tours, and practical destination guiding.',
-      aboutMember: 'Zaza is a member of the World Guides Association.',
-      aboutCertificateTitle: 'Professional Certificate',
-      aboutCertificateBody: 'Tourism management and tourist guiding certification by Newkaz.',
-    },
-    ka: {
-      location: 'თბილისი, საქართველო',
-      tourTypes: 'ლაშქრობა, ქალაქის ტურები, ღვინის დეგუსტაცია, კულტურული მარშრუტები',
-      why1: 'ადგილობრივი გიდები ღრმა ცოდნით',
-      why2: 'პატარა ჯგუფები და პერსონალური მიდგომა',
-      why3: 'მოქნილი გრაფიკი და ინდივიდუალური მარშრუტები',
-      why4: 'საუკეთესო ფასები ავთენტური გამოცდილებისთვის',
-      why5: 'უსაფრთხოება პირველ ადგილზე',
-      why6: 'პასუხისმგებლიანი და მდგრადი ტურიზმი',
-      aboutEyebrow: 'ჩვენ შესახებ',
-      aboutTitle: 'სერტიფიცირებული გიდი, სანდო გამოცდილება',
-      aboutBody:
-        'ზაზა არის სერტიფიცირებული გიდი მრავალ მიმართულებაში: ღვინის ტურიზმი, ფეხით ტურები და ტურისტული გიდობა.',
-      aboutMember: 'ზაზა მსოფლიო გიდების ასოციაციის წევრია.',
-      aboutCertificateTitle: 'პროფესიული სერტიფიკატი',
-      aboutCertificateBody: 'Newkaz-ის ტურიზმის მენეჯმენტისა და ტურისტული გიდობის სერტიფიკატი.',
-    },
-    ru: {
-      location: 'Тбилиси, Грузия',
-      tourTypes: 'Походы, городские прогулки, винные дегустации, культурные маршруты',
-      why1: 'Местные гиды с глубокими знаниями',
-      why2: 'Небольшие группы и личный подход',
-      why3: 'Гибкий график и индивидуальные маршруты',
-      why4: 'Лучшее соотношение цены и качества',
-      why5: 'Безопасность и качественная организация',
-      why6: 'Ответственный и устойчивый туризм',
-      aboutEyebrow: 'О нас',
-      aboutTitle: 'Сертифицированный гид и проверенный опыт',
-      aboutBody:
-        'Заза — сертифицированный гид в нескольких направлениях: винный туризм, пешеходные экскурсии и туристическое сопровождение.',
-      aboutMember: 'Заза является членом Всемирной ассоциации гидов.',
-      aboutCertificateTitle: 'Профессиональный сертификат',
-      aboutCertificateBody: 'Сертификат Newkaz по туристическому менеджменту и сопровождению туристов.',
-    },
+  const copy = fallbackByLocale[locale];
+
+  const pickLocalized = (value: string | undefined, fallback: string, englishDefault?: string) => {
+    if (!value || !value.trim()) return fallback;
+    const clean = value.trim();
+    if (locale !== 'en' && englishDefault && clean === englishDefault) return fallback;
+    return clean;
   };
-  const copy = homeFallbacks[locale];
 
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <span className="eyebrow">{settings.heroEyebrow || 'ZazaGuide'}</span>
+          <span className="eyebrow">
+            {pickLocalized(settings.heroEyebrow, copy.heroEyebrow, englishDefaults.heroEyebrow)}
+          </span>
           <h1 className={styles.heroTitle}>
-            {settings.heroTagline || "Georgia, but deeper."}
+            {pickLocalized(settings.heroTagline, copy.heroTagline, englishDefaults.heroTagline)}
           </h1>
           <p className={styles.heroSubtitle}>
-            {settings.heroSubtitle || 'Mountains, monasteries, wine — led by local guides.'}
+            {pickLocalized(settings.heroSubtitle, copy.heroSubtitle, englishDefaults.heroSubtitle)}
           </p>
           <div className={styles.heroActions}>
             <Link href={`/${locale}/tours`} className="btn btn-primary">
@@ -118,6 +150,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
             </Link>
           </div>
         </div>
+
         <div className={styles.heroPanels}>
           <div className={styles.panel}>
             <h3>{settings.location || copy.location}</h3>
