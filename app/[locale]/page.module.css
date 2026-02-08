@@ -93,6 +93,73 @@
   padding: 4rem 0 5rem;
 }
 
+.aboutSection {
+  padding: 1rem 0 2rem;
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.aboutCard,
+.certificateCard {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(91, 27, 45, 0.14);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.aboutCard {
+  padding: 2rem;
+  display: grid;
+  gap: 0.95rem;
+}
+
+.aboutCard h2 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+  margin: 0;
+}
+
+.aboutCard p {
+  color: var(--ink-soft);
+}
+
+.aboutMember {
+  color: var(--wine);
+  font-weight: 700;
+}
+
+.certificateCard {
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.certificateMedia {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(91, 27, 45, 0.12);
+  background: linear-gradient(135deg, #ffffff, #f0ece7);
+}
+
+.certificateCard h3 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  margin: 0 0 0.25rem;
+}
+
+.certificateCard p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
 .story {
   padding: 2rem 0 6rem;
 }
@@ -131,5 +198,9 @@
 @media (max-width: 768px) {
   .hero {
     padding: 4rem 0 3rem;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr;
   }
 }

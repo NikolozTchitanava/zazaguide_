@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import TourCard from '@/components/TourCard';
 import { getDictionary, normalizeLocale, Locale } from '@/lib/i18n';
@@ -27,6 +28,75 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const t = getDictionary(locale);
   const settings = await getSettings(locale);
   const featuredTours = await getFeaturedTours(locale);
+  const homeFallbacks: Record<Locale, {
+    location: string;
+    tourTypes: string;
+    why1: string;
+    why2: string;
+    why3: string;
+    why4: string;
+    why5: string;
+    why6: string;
+    aboutEyebrow: string;
+    aboutTitle: string;
+    aboutBody: string;
+    aboutMember: string;
+    aboutCertificateTitle: string;
+    aboutCertificateBody: string;
+  }> = {
+    en: {
+      location: 'Tbilisi, Georgia',
+      tourTypes: 'Hiking, city walks, wine tastings, cultural routes',
+      why1: 'Local guides with deep knowledge',
+      why2: 'Small groups and a personal touch',
+      why3: 'Flexible schedules and custom routes',
+      why4: 'Best value for authentic experiences',
+      why5: 'Safety-first approach and quality gear',
+      why6: 'Responsible, sustainable tourism',
+      aboutEyebrow: 'About Us',
+      aboutTitle: 'Certified Guide, Trusted Experience',
+      aboutBody:
+        'Zaza is a certified guide in multiple fields, including wine tourism, walking tours, and practical destination guiding.',
+      aboutMember: 'Zaza is a member of the World Guides Association.',
+      aboutCertificateTitle: 'Professional Certificate',
+      aboutCertificateBody: 'Tourism management and tourist guiding certification by Newkaz.',
+    },
+    ka: {
+      location: 'თბილისი, საქართველო',
+      tourTypes: 'ლაშქრობა, ქალაქის ტურები, ღვინის დეგუსტაცია, კულტურული მარშრუტები',
+      why1: 'ადგილობრივი გიდები ღრმა ცოდნით',
+      why2: 'პატარა ჯგუფები და პერსონალური მიდგომა',
+      why3: 'მოქნილი გრაფიკი და ინდივიდუალური მარშრუტები',
+      why4: 'საუკეთესო ფასები ავთენტური გამოცდილებისთვის',
+      why5: 'უსაფრთხოება პირველ ადგილზე',
+      why6: 'პასუხისმგებლიანი და მდგრადი ტურიზმი',
+      aboutEyebrow: 'ჩვენ შესახებ',
+      aboutTitle: 'სერტიფიცირებული გიდი, სანდო გამოცდილება',
+      aboutBody:
+        'ზაზა არის სერტიფიცირებული გიდი მრავალ მიმართულებაში: ღვინის ტურიზმი, ფეხით ტურები და ტურისტული გიდობა.',
+      aboutMember: 'ზაზა მსოფლიო გიდების ასოციაციის წევრია.',
+      aboutCertificateTitle: 'პროფესიული სერტიფიკატი',
+      aboutCertificateBody: 'Newkaz-ის ტურიზმის მენეჯმენტისა და ტურისტული გიდობის სერტიფიკატი.',
+    },
+    ru: {
+      location: 'Тбилиси, Грузия',
+      tourTypes: 'Походы, городские прогулки, винные дегустации, культурные маршруты',
+      why1: 'Местные гиды с глубокими знаниями',
+      why2: 'Небольшие группы и личный подход',
+      why3: 'Гибкий график и индивидуальные маршруты',
+      why4: 'Лучшее соотношение цены и качества',
+      why5: 'Безопасность и качественная организация',
+      why6: 'Ответственный и устойчивый туризм',
+      aboutEyebrow: 'О нас',
+      aboutTitle: 'Сертифицированный гид и проверенный опыт',
+      aboutBody:
+        'Заза — сертифицированный гид в нескольких направлениях: винный туризм, пешеходные экскурсии и туристическое сопровождение.',
+      aboutMember: 'Заза является членом Всемирной ассоциации гидов.',
+      aboutCertificateTitle: 'Профессиональный сертификат',
+      aboutCertificateBody: 'Сертификат Newkaz по туристическому менеджменту и сопровождению туристов.',
+    },
+  };
+  const copy = homeFallbacks[locale];
 
   return (
     <div className={styles.page}>
@@ -50,16 +120,43 @@ export default async function HomePage({ params }: { params: { locale: string } 
         </div>
         <div className={styles.heroPanels}>
           <div className={styles.panel}>
-            <h3>{settings.location || 'Tbilisi, Georgia'}</h3>
-            <p>{settings.tourTypes || 'Hiking, city walks, wine tastings, cultural routes'}</p>
+            <h3>{settings.location || copy.location}</h3>
+            <p>{settings.tourTypes || copy.tourTypes}</p>
           </div>
           <div className={styles.panelAlt}>
             <h4>{t.sections.whyTitle}</h4>
             <ul>
-              <li>{settings.whyChooseUs1 || 'Local guides with deep knowledge'}</li>
-              <li>{settings.whyChooseUs2 || 'Small groups and a personal touch'}</li>
-              <li>{settings.whyChooseUs3 || 'Flexible schedules and custom routes'}</li>
+              <li>{settings.whyChooseUs1 || copy.why1}</li>
+              <li>{settings.whyChooseUs2 || copy.why2}</li>
+              <li>{settings.whyChooseUs3 || copy.why3}</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.aboutSection}>
+        <div className="container">
+          <div className={styles.aboutGrid}>
+            <article className={styles.aboutCard}>
+              <span className="eyebrow">{copy.aboutEyebrow}</span>
+              <h2>{copy.aboutTitle}</h2>
+              <p>{copy.aboutBody}</p>
+              <p className={styles.aboutMember}>{copy.aboutMember}</p>
+            </article>
+
+            <article className={styles.certificateCard}>
+              <div className={styles.certificateMedia}>
+                <Image
+                  src="/uploads/newkaz-certificate.svg"
+                  alt="Newkaz guide certificate for Zaza Chitanava"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <h3>{copy.aboutCertificateTitle}</h3>
+              <p>{copy.aboutCertificateBody}</p>
+            </article>
           </div>
         </div>
       </section>
@@ -87,9 +184,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
               <p className={styles.storyBody}>{t.home.storyBody}</p>
             </div>
             <div className={styles.storyCard}>
-              <h3>{settings.whyChooseUs4 || 'Best value for authentic experiences'}</h3>
-              <p>{settings.whyChooseUs5 || 'Safety-first approach and quality gear'}</p>
-              <p>{settings.whyChooseUs6 || 'Responsible, sustainable tourism'}</p>
+              <h3>{settings.whyChooseUs4 || copy.why4}</h3>
+              <p>{settings.whyChooseUs5 || copy.why5}</p>
+              <p>{settings.whyChooseUs6 || copy.why6}</p>
             </div>
           </div>
         </div>
