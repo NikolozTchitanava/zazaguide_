@@ -10,14 +10,15 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const locale = normalizeLocale(searchParams.get('locale') || undefined);
 
-        const settings = await prisma.homepageSetting.findMany({
+        const settings: Array<{ key: string; value: string }> = await prisma.homepageSetting.findMany({
             where: { locale },
+            select: { key: true, value: true },
         });
 
-        const settingsObj = settings.reduce<Record<string, string>>((acc, setting) => {
-            acc[setting.key] = setting.value;
-            return acc;
-        }, {});
+        const settingsObj: Record<string, string> = {};
+        for (const setting of settings) {
+            settingsObj[setting.key] = setting.value;
+        }
 
         return NextResponse.json(settingsObj);
     } catch (error) {
